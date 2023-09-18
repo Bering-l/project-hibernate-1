@@ -29,7 +29,7 @@ public class PlayerRepositoryDB implements IPlayerRepository {
     public List<Player> getAll(int pageNumber, int pageSize) {
         try (Session session = sessionFactory.openSession()) {
             NativeQuery<Player> query = session.createNativeQuery("select * from player", Player.class);
-            query.setFirstResult(pageNumber*pageSize);
+            query.setFirstResult(pageNumber * pageSize);
             query.setMaxResults(pageSize);
             return query.list();
         }
@@ -38,7 +38,7 @@ public class PlayerRepositoryDB implements IPlayerRepository {
     @Override
     public int getAllCount() {
         try (Session session = sessionFactory.openSession()) {
-            Query<Long> query = session.createNamedQuery("player_count", Long.class);
+            Query<Long> query = session.createNamedQuery("getAllCount", Long.class);
             return query.uniqueResult().intValue();
         }
     }
@@ -67,8 +67,7 @@ public class PlayerRepositoryDB implements IPlayerRepository {
             session.merge(player);
             transaction.commit();
             return player;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             throw e;
         }
@@ -88,8 +87,7 @@ public class PlayerRepositoryDB implements IPlayerRepository {
             transaction = session.beginTransaction();
             session.remove(player);
             transaction.commit();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             throw e;
         }
